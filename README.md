@@ -2,7 +2,7 @@
 
 <code>git clone https://github.com/b3nq2x/Pinterest-Login.git</code>
 
-<h3>Install :</h3><br>
+<h3>Install :</h3>
 pip install playwright<br>
 playwright install<br>
 pip install fake-useragent<br>
