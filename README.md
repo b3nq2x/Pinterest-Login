@@ -12,3 +12,7 @@ pip install fake-useragent<br>
 3. Status akan di catat pada kolom <b>keterangan</b><br>
 4. File cookie akan tersimpan di folder <b>/cookies</b><br>
 5. Akun yang gagal login / error tidak akan menyimpan cookie.
+<br>
+<br>
+<br>
+<b>NOTE : Jangan membuka file csv saat script sedang berjalan</b>
