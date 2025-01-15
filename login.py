@@ -45,13 +45,18 @@ def login(page, email, password):
 
 def check_account_disabled(page, email):
     try:
-        # Periksa apakah elemen role="alertdialog" ada
+        # Periksa apakah elemen role="alertdialog" ada (sebagai indikator login gagal)
         alert_dialog = page.locator("//*[@role='alertdialog']")
         # Jika ada, ambil teks dari elemen <h1> di dalam alert dialog
         h1_text = alert_dialog.locator("h1").text_content()
         return f"Login gagal: {h1_text}"
     except:
-        return None
+        # Jika tidak ada alert, periksa URL untuk memastikan login berhasil
+        current_url = page.url
+        if "/business/hub/" in current_url:
+            return None  # Login berhasil
+        else:
+            return "Login gagal: URL tidak mengarah ke halaman yang benar"
 
 def update_csv_status(email, status):
     # Membaca file CSV dan memperbarui kolom 'Keterangan'
@@ -99,8 +104,6 @@ def main():
 
                 # Pilih user agent palsu (desktop) menggunakan fake_useragent
                 user_agent = ua.random
-                
-                # Pastikan user agent bukan mobile
                 while 'Mobile' in user_agent or 'Android' in user_agent or 'iPhone' in user_agent:
                     user_agent = ua.random
 
@@ -113,7 +116,7 @@ def main():
                 print(f"{email} : Sedang Di Proses")
                 login(page, email, password)
 
-                # Periksa apakah login gagal (account disabled)
+                # Periksa apakah login gagal atau berhasil dengan memeriksa URL
                 status = check_account_disabled(page, email)
                 if status:
                     # Jika login gagal, perbarui CSV dengan alasan kegagalan
@@ -131,7 +134,7 @@ def main():
                 # Jeda 60 detik sebelum melanjutkan ke akun berikutnya
                 browser.close()                
                 print(f"Jeda 60 detik sebelum login akun berikutnya...")
-                sleep(60)                
+                sleep(60)                 
 
                 processed_accounts += 1
                 # Notifikasi setelah setiap akun diproses
